@@ -117,6 +117,8 @@ class AprendizController extends Controller
         $aprendiz->save();
 
         return redirect()->route('Aprendiz.index')->with('success', 'Aprendiz actualizado');
+
+
     }
 
     /**

@@ -1,86 +1,101 @@
 @extends('layouts.app')
 
 @section('contenido')
+    <div class="card-custom shadow-sm p-4 bg-white rounded-4">
 
-    {{--
-    <h1>Lista de EPS</h1>
+        {{-- Encabezado --}}
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h1 class="fw-bold text-dark mb-1">Lista de EPS</h1>
+                <p class="text-muted small">Gestión de Entidades Promotoras de Salud</p>
+            </div>
+            <a href="{{ route('Eps.create') }}" class="btn btn-sena shadow-sm px-4">
+                <i class="fas fa-plus-circle me-1"></i> Crear Nuevo
+            </a>
+        </div>
 
-    <table>
-        <thead>
-        <tr>
-            <th>NIS</th>
-            <th>Número de Documento</th>
-            <th>Denominación</th>
-            <th>Observaciones</th>
-        </tr>
-        </thead>
-        <tbody>
-        @foreach($eps as $item)
-            <tr>
-                <td>{{ $item->NIS }}</td>
-                <td>{{ $item->Numdoc }}</td>
-                <td>{{ $item->Denominacion }}</td>
-                <td>{{ $item->Observaciones }}</td>
-            </tr>
-        @endforeach
-        </tbody>
-    </table>
-     --}}
+        {{-- Barra de búsqueda estilizada --}}
+        <div class="bg-light p-3 rounded-3 mb-4 border shadow-sm">
+            <form action="{{ route('Eps.index') }}" method="GET" class="row g-2 align-items-center">
+                <div class="col-md-6">
+                    <div class="input-group">
+                        <span class="input-group-text bg-white border-end-0"><i class="fas fa-search text-muted"></i></span>
+                        <input type="text" name="buscar" value="{{ $buscar }}" class="form-control border-start-0" placeholder="Buscar por Nombre o Documento...">
+                    </div>
+                </div>
+                <div class="col-auto">
+                    <button type="submit" class="btn btn-sena px-4">Consultar</button>
+                </div>
+                <div class="col-auto">
+                    <a href="{{ route('Eps.index') }}" class="btn btn-outline-secondary">Limpiar</a>
+                </div>
+            </form>
+        </div>
 
-    <h1>Lista de EPS</h1>
+        {{-- Tabla Responsiva Profesional --}}
+        <div class="table-responsive rounded-3 border">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-light">
+                <tr class="text-sena small text-uppercase fw-bold">
+                    <th style="width: 200px;">Número de Documento</th>
+                    <th>Denominación de la EPS</th>
+                    <th>Observaciones</th>
+                    <th class="text-center" style="width: 180px;">Acciones</th>
+                </tr>
+                </thead>
+                <tbody>
+                @forelse($eps as $item)
+                    <tr>
+                        <td class="fw-bold text-dark">{{ $item->Numdoc }}</td>
+                        <td class="text-sena fw-bold text-uppercase">{{ $item->Denominacion }}</td>
+                        <td>
+                            <p class="mb-0 small text-muted text-truncate" style="max-width: 350px;" title="{{ $item->Observaciones }}">
+                                {{ $item->Observaciones ?: 'Sin observaciones registradas' }}
+                            </p>
+                        </td>
+                        <td class="text-center">
+                            <div class="btn-group shadow-sm" role="group">
+                                {{-- Ver --}}
+                                <a href="{{ route('Eps.show', $item->NIS) }}" class="btn btn-sm btn-outline-info" title="Ver Detalle">
+                                    <i class="fas fa-eye"></i>
+                                </a>
 
-    {{-- Barra de busqueda--}}
-    <div style="margin-bottom: 20px;">
-        <form action="{{ route('Eps.index') }}" method="GET" style="display: flex; gap: 10px;">
-            <input type="text" name="buscar" value="{{ $buscar }}" placeholder="Buscar por Codigo o Nombre..." style="padding: 8px; border: 1px solid #ccc; border-radius: 4px; width: 300px;">
-            <button type="submit" style="background: #39a900; color: white; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer;">Consultar</button>
-            <a href="{{ route('Eps.index') }}" style="background: #666; color: white; padding: 8px 15px; text-decoration: none; border-radius: 4px;">Limpiar</a>
-        </form>
+                                {{-- Editar --}}
+                                <a href="{{ route('Eps.edit', $item->NIS) }}" class="btn btn-sm btn-outline-warning text-dark" title="Editar">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+
+                                {{-- Eliminar --}}
+                                <form action="{{ route('Eps.destroy', $item->NIS) }}" method="POST" class="d-inline">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('¿Deseas eliminar esta EPS?')" title="Eliminar">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                @empty
+                    <tr>
+                        <td colspan="4" class="text-center py-5">
+                            <i class="fas fa-hospital-alt fa-3x text-muted mb-3 d-block"></i>
+                            <span class="text-muted">No se encontraron EPS con el término <strong>"{{ $buscar }}"</strong></span>
+                        </td>
+                    </tr>
+                @endforelse
+                </tbody>
+            </table>
+        </div>
     </div>
 
-    <div style="margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center;">
-        <a href="{{ route('Eps.create') }}"
-           style="background: #39a900; color: white; padding: 10px 20px; text-decoration: none; border-radius: 4px; font-weight: bold;">
-            + Crear Nuevo
-        </a>
-    </div>
+    <style>
+        .text-sena { color: #39a900; }
+        .btn-sena { background-color: #39a900; color: white; border: none; font-weight: bold; transition: 0.3s; }
+        .btn-sena:hover { background-color: #2d8500; color: white; transform: translateY(-2px); }
 
-
-    <table border="1" style="width: 100%; border-collapse: collapse; margin-top: 20px;">
-        <thead>
-        <tr style="background-color: #39a900; color: white;">
-
-            <th>Numero de Documento</th>
-            <th>Denominación</th>
-            <th>Observaciones</th>
-            <th style="text-align: center;">Acciones</th>
-        </tr>
-        </thead>
-        <tbody>
-        @foreach($eps as $item)
-            <tr>
-
-                <td>{{ $item->Numdoc }}</td>
-                <td>{{ $item->Denominacion }}</td>
-                <td>{{ $item->Observaciones }}</td>
-                <td style="text-align: center;">
-                    {{-- El NIS se sigue usando internamente para las rutas, aunque no se vea --}}
-                    <a href="{{ route('Eps.show', $item->NIS) }}" style="background: #007bff; color: white; padding: 5px 10px; text-decoration: none; border-radius: 3px; font-size: 13px;">Ver</a>
-
-                    <a href="{{ route('Eps.edit', $item->NIS) }}" style="background: #ffc107; color: black; padding: 5px 10px; text-decoration: none; border-radius: 3px; font-size: 13px; margin: 0 5px;">Editar</a>
-
-                    <form action="{{ route('Eps.destroy', $item->NIS) }}" method="POST" style="display:inline;">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" style="background: #dc3545; color: white; border: none; padding: 5px 10px; border-radius: 3px; cursor: pointer; font-size: 13px;" onclick="return confirm('¿Eliminar esta EPS?')">
-                            Eliminar
-                        </button>
-                    </form>
-                </td>
-            </tr>
-        @endforeach
-        </tbody>
-    </table>
-
-
+        .table-hover tbody tr:hover { background-color: rgba(57, 169, 0, 0.02); }
+        .btn-group .btn { padding: 0.4rem 0.8rem; }
+        .card-custom { border-radius: 1rem; }
+    </style>
 @endsection

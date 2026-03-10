@@ -8,6 +8,7 @@ use App\Models\fichasdecaracterizacion;
 use App\Models\instructor;
 use App\Notifications\AsignacionInstructorEmail;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class FichasdecaracterizacionController extends Controller
 {
@@ -18,14 +19,19 @@ class FichasdecaracterizacionController extends Controller
     {
         $buscar = $request->get('buscar');
 
-        // Cargamos las relaciones 'centro' y 'programa' (asegúrate de tenerlas en el Modelo)
-        $fichasdecaracterizacion = \App\Models\Fichasdecaracterizacion::with(['centro', 'programa', 'instructor'])
+        $fichas = \App\Models\fichasdecaracterizacion::with(['centro', 'programa', 'instructor'])
             ->when($buscar, function ($query, $buscar) {
                 return $query->where('Codigo', 'LIKE', "%$buscar%")
-                    ->orWhere('Denominacion', 'LIKE', "%$buscar%");
+                    ->orWhere('Denominacion', 'LIKE', "%$buscar%")
+                    ->orWhereHas('instructor', function ($q) use ($buscar) {
+                        // Esta es la clave: concatenamos Nombre y Apellido para la búsqueda
+                        $q->where(\DB::raw("CONCAT(Nombres, ' ', Apellidos)"), 'LIKE', "%$buscar%")
+                            ->orWhere('Nombres', 'LIKE', "%$buscar%")
+                            ->orWhere('Apellidos', 'LIKE', "%$buscar%");
+                    });
             })->get();
 
-        return view('FichasCaracterizacion.index', compact('fichasdecaracterizacion', 'buscar'));
+        return view('FichasCaracterizacion.index', compact('fichas', 'buscar'));
     }
 
     /**
@@ -53,35 +59,53 @@ class FichasdecaracterizacionController extends Controller
             'FechaFin'      => ['required', 'date'],
             'Observaciones' => ['nullable', 'max:200'],
             'tbl_instructor_NIS' =>['required']
+        ],[
+
         ]);
 
         if ($v->fails()) {
             return back()->withErrors($v)->withInput();
         }
 
-        $ficha = new \App\Models\Fichasdecaracterizacion();
-        $ficha->Codigo = $request->Codigo;
-        $ficha->Denominacion = $request->Denominacion;
-        $ficha->Cupo = $request->Cupo;
-        $ficha->FechaInicio = $request->FechaInicio;
-        $ficha->FechaFin = $request->FechaFin;
-        $ficha->Observaciones = $request->Observaciones;
-        $ficha->tbl_instructor_NIS = $request->tbl_instructor_NIS;
 
-        // Guardamos los NIS seleccionados en el formulario
-        $ficha->tbl_centrosdeformacion_NIS = $request->tbl_centrosdeformacion_NIS;
-        $ficha->tbl_programasdeformacion_NIS = $request->tbl_programasdeformacion_NIS;
-
-        $ficha->save();
-
-        $ficha->load('instructor', 'programa');
+        DB::beginTransaction();
 
 
-       $ficha->instructor->notify(new AsignacionInstructorEmail($ficha));
+        try {
 
 
-        return redirect()->route('Fichasdecaracterizacion.index')
-            ->with('success', 'Ficha creada con éxito');
+            $ficha = new \App\Models\Fichasdecaracterizacion();
+            $ficha->Codigo = $request->Codigo;
+            $ficha->Denominacion = $request->Denominacion;
+            $ficha->Cupo = $request->Cupo;
+            $ficha->FechaInicio = $request->FechaInicio;
+            $ficha->FechaFin = $request->FechaFin;
+            $ficha->Observaciones = $request->Observaciones;
+            $ficha->tbl_instructor_NIS = $request->tbl_instructor_NIS;
+
+            // Guardamos los NIS seleccionados en el formulario
+            $ficha->tbl_centrosdeformacion_NIS = $request->tbl_centrosdeformacion_NIS;
+            $ficha->tbl_programasdeformacion_NIS = $request->tbl_programasdeformacion_NIS;
+
+            $ficha->save();
+            DB::commit();
+
+            $ficha->load('instructor', 'programa');
+
+
+         $ficha->instructor->notify(new AsignacionInstructorEmail($ficha));
+
+
+            return redirect()->route('Fichasdecaracterizacion.index')
+                ->with('success', 'Ficha creada con éxito');
+
+
+        }catch (\Exception $e){
+
+            DB::rollBack();
+
+            return $e->getMessage();
+        }
     }
 
     /**
@@ -99,7 +123,8 @@ class FichasdecaracterizacionController extends Controller
         $centros = \App\Models\Centrosdeformacion::all();
         $programas = \App\Models\Programasdeformacion::all();
 
-        return view('FichasCaracterizacion.edit', compact('ficha', 'centros', 'programas'));
+        $instructor = Instructor::all();
+        return view('FichasCaracterizacion.edit', compact('ficha', 'centros', 'programas', 'instructor'));
     }
 
     /**

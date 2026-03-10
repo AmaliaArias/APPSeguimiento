@@ -1,41 +1,87 @@
 @extends('layouts.app')
 
 @section('contenido')
-    <div style="max-width: 800px; margin: 20px auto; background: white; padding: 30px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
-        <h2 style="color: #39a900; border-bottom: 2px solid #39a900; padding-bottom: 10px;">
-            Ficha Técnica del Aprendiz
-        </h2>
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-md-9">
+                {{-- Tarjeta principal --}}
+                <div class="card shadow-sm border-0" style="border-radius: 15px;">
 
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px;">
-            <div style="background: #f9f9f9; padding: 15px; border-radius: 8px;">
-                <h3 style="color: #666; margin-top: 0;">Identificación</h3>
-                <p><strong>Nombres:</strong> {{ $aprendiz->Nombres }}</p>
-                <p><strong>Apellidos:</strong> {{ $aprendiz->Apellidos }}</p>
-                <p><strong>Tipo Doc:</strong> {{ $tipoDoc->Denominacion ?? 'N/A' }}</p>
-                <p><strong>Número:</strong> {{ $aprendiz->Numdoc }}</p>
-                <p><strong>Sexo:</strong> {{ $aprendiz->Sexo == 'M' ? 'Masculino' : 'Femenino' }}</p>
-                <p><strong>Fecha Nacimiento:</strong> {{ $aprendiz->FechaNac }}</p>
+                    <div class="card-header bg-white border-0 pt-4 px-4">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h2 class="fw-bold text-success mb-0">
+                                    <i class="fas fa-user-graduate me-2"></i>Ficha Técnica del Aprendiz
+                                </h2>
+                                <hr style="border-top: 3px solid #39a900; width: 60px; opacity: 1;">
+                            </div>
+                            <span class="badge bg-success px-3 py-2 rounded-pill">Estado: Vinculado</span>
+                        </div>
+                    </div>
+
+                    <div class="card-body p-4">
+                        <div class="row g-4">
+
+                            {{-- Bloque 1: Identificación (Borde Azul) --}}
+                            <div class="col-md-6">
+                                <label class="text-secondary fw-bold small text-uppercase text-muted mb-2">Datos de Identificación:</label>
+                                <div class="p-3 bg-light rounded border-start border-4 border-info shadow-sm h-100">
+                                    <p class="mb-2"><strong>Nombres:</strong> <span class="text-dark">{{ $aprendiz->Nombres }}</span></p>
+                                    <p class="mb-2"><strong>Apellidos:</strong> <span class="text-dark">{{ $aprendiz->Apellidos }}</span></p>
+                                    <p class="mb-2"><strong>Tipo Doc:</strong> <span class="text-dark">{{ $tipoDoc->Denominacion ?? 'N/A' }}</span></p>
+                                    <p class="mb-2"><strong>Número:</strong> <span class="fw-bold text-primary">{{ $aprendiz->Numdoc }}</span></p>
+                                    <p class="mb-2"><strong>Sexo:</strong>
+                                        <span class="badge {{ $aprendiz->Sexo == 'M' ? 'bg-primary' : 'bg-danger' }} bg-opacity-10 {{ $aprendiz->Sexo == 'M' ? 'text-primary' : 'text-danger' }}">
+                                            {{ $aprendiz->Sexo == 'M' ? 'Masculino' : 'Femenino' }}
+                                        </span>
+                                    </p>
+                                    <p class="mb-0"><strong>F. Nacimiento:</strong> <span class="text-dark">{{ $aprendiz->FechaNac }}</span></p>
+                                </div>
+                            </div>
+
+                            {{-- Bloque 2: Contacto (Borde Verde) --}}
+                            <div class="col-md-6">
+                                <label class="text-secondary fw-bold small text-uppercase text-muted mb-2">Contacto y Ubicación:</label>
+                                <div class="p-3 bg-light rounded border-start border-4 border-success shadow-sm h-100">
+                                    <p class="mb-2"><strong>Dirección:</strong> <br><span class="text-dark">{{ $aprendiz->Direccion }}</span></p>
+                                    <p class="mb-2"><strong>Teléfono:</strong> <br><span class="text-dark">{{ $aprendiz->Telefono }}</span></p>
+                                    <p class="mb-2">
+                                        <strong>Correo Institucional:</strong><br>
+                                        <a href="mailto:{{ $aprendiz->CorreoInstitucional }}" class="text-decoration-none fw-bold text-success small">
+                                            {{ $aprendiz->CorreoInstitucional }}
+                                        </a>
+                                    </p>
+                                    <p class="mb-0">
+                                        <strong>Correo Personal:</strong><br>
+                                        <span class="small text-muted">{{ $aprendiz->CorreoPersonal }}</span>
+                                    </p>
+                                </div>
+                            </div>
+
+                            {{-- Bloque 3: Sistema (Borde Gris) --}}
+                            <div class="col-12">
+                                <div class="p-3 rounded d-flex align-items-center shadow-sm" style="background: #f8f9fa; border-left: 4px solid #ced4da;">
+                                    <i class="fas fa-database text-muted me-3 fa-2x"></i>
+                                    <div>
+                                        <span class="d-block text-secondary small fw-bold">NIS DE REGISTRO (ID SISTEMA)</span>
+                                        <span class="fw-bold text-dark">{{ $aprendiz->NIS }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {{-- Botones de Navegación --}}
+                        <div class="d-flex gap-2 border-top pt-4 mt-4">
+                            <a href="{{ route('Aprendiz.index') }}" class="btn btn-secondary px-4 fw-bold shadow-sm" style="border-radius: 8px;">
+                                <i class="fas fa-arrow-left me-1"></i> Volver a la Lista
+                            </a>
+                            <a href="{{ route('Aprendiz.edit', $aprendiz->NIS) }}" class="btn btn-warning px-4 fw-bold shadow-sm" style="border-radius: 8px;">
+                                <i class="fas fa-edit me-1"></i> Editar Aprendiz
+                            </a>
+                        </div>
+                    </div>
+                </div>
             </div>
-
-            <div style="background: #f9f9f9; padding: 15px; border-radius: 8px;">
-                <h3 style="color: #666; margin-top: 0;">Contacto y Ubicación</h3>
-                <p><strong>Dirección:</strong> {{ $aprendiz->Direccion }}</p>
-                <p><strong>Teléfono:</strong> {{ $aprendiz->Telefono }}</p>
-                <p><strong>Correo Institucional:</strong><br>
-                    <small style="color: #007bff;">{{ $aprendiz->CorreoInstitucional }}</small></p>
-                <p><strong>Correo Personal:</strong><br>
-                    <small>{{ $aprendiz->CorreoPersonal }}</small></p>
-            </div>
-        </div>
-
-        <div style="margin-top: 20px; background: #e8f5e9; padding: 15px; border-radius: 8px; border-left: 5px solid #39a900;">
-            <p style="margin: 0;"><strong>NIS de Registro:</strong> {{ $aprendiz->NIS }}</p>
-            <p style="margin: 5px 0 0 0;"><strong>Estado en Ficha:</strong> Vinculado</p>
-        </div>
-
-        <div style="margin-top: 30px; display: flex; gap: 10px;">
-            <a href="{{ route('Aprendiz.index') }}" style="background: #666; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; font-weight: bold;">Volver a la Lista</a>
-            <a href="{{ route('Aprendiz.edit', $aprendiz->NIS) }}" style="background: #ffc107; color: black; padding: 10px 20px; text-decoration: none; border-radius: 5px; font-weight: bold;">Editar Aprendiz</a>
         </div>
     </div>
 @endsection

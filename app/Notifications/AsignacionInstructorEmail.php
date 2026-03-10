@@ -38,7 +38,7 @@ class AsignacionInstructorEmail extends Notification
         return (new MailMessage)
                     ->subject('Notificación de Asignación de Ficha.')
                     ->view('emails.asignacion_instructor',
-                    ['ficha' =>$this->ficha, 'instructor' => $this->ficha->instructor,
+                        ['ficha' =>$this->ficha, 'instructor' => $this->ficha->instructor,
                         'programa' => $this->ficha->programa]);
     }
 

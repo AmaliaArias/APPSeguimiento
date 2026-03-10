@@ -14,6 +14,7 @@ class fichasdecaracterizacion extends Model
     public $incrementing = true;
 
     protected $fillable = [
+        'NIS',
         'Codigo',
         'Denominacion',
         'Cupo',
@@ -39,9 +40,10 @@ class fichasdecaracterizacion extends Model
 
     public function instructor()
     {
-        return $this->belongsTo(instructor::class, 'tbl_instructor_NIS');
+        return $this->belongsTo(instructor::class, 'tbl_instructor_NIS', 'NIS');
 
     }
+
 
 
 }

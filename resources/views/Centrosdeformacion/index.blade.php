@@ -1,69 +1,92 @@
 @extends('layouts.app')
 
 @section('contenido')
+    <div class="card shadow-sm border-0 p-4" style="border-radius: 15px;"> {{-- Contenedor de tarjeta unificado --}}
 
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="fw-bold text-dark">Lista de Centros de Formación</h2>
+            <a href="{{ route('Centrosdeformacion.create') }}" class="btn btn-success px-4 fw-bold shadow-sm" style="background-color: #39a900; border: none;">
+                <i class="fas fa-plus-circle me-1"></i> + Crear Nuevo
+            </a>
+        </div>
 
-    <h1>Lista de Centros de Formación</h1>
+        {{-- Barra de búsqueda (Estilo unificado con Tipos de Documentos) --}}
+        <div class="bg-light p-3 rounded mb-4 border shadow-sm">
+            <form action="{{ route('Centrosdeformacion.index') }}" method="GET" class="row g-2">
+                <div class="col-md-6">
+                    <div class="input-group">
+                    <span class="input-group-text bg-white border-end-0 text-muted">
+                        <i class="fas fa-search"></i>
+                    </span>
+                        <input type="text" name="buscar" value="{{ $buscar }}"
+                               class="form-control border-start-0 shadow-none"
+                               placeholder="Buscar por Nombre...">
+                    </div>
+                </div>
+                <div class="col-auto">
+                    <button type="submit" class="btn btn-success px-4" style="background-color: #39a900; border: none;">Consultar</button>
+                </div>
+                <div class="col-auto">
+                    <a href="{{ route('Centrosdeformacion.index') }}" class="btn btn-secondary px-3">Limpiar</a>
+                </div>
+            </form>
+        </div>
 
-    {{-- Barra de busqueda--}}
-    <div style="margin-bottom: 20px;">
-        <form action="{{ route('Centrosdeformacion.index') }}" method="GET" style="display: flex; gap: 10px;">
-            <input type="text" name="buscar" value="{{ $buscar }}" placeholder="Buscar por Nombre..." style="padding: 8px; border: 1px solid #ccc; border-radius: 4px; width: 300px;">
-            <button type="submit" style="background: #39a900; color: white; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer;">Consultar</button>
-            <a href="{{ route('Centrosdeformacion.index') }}" style="background: #666; color: white; padding: 8px 15px; text-decoration: none; border-radius: 4px;">Limpiar</a>
-        </form>
+        {{-- Tabla Responsiva con todos tus campos originales --}}
+        <div class="table-responsive">
+            <table class="table table-hover align-middle border">
+                <thead class="table-light">
+                <tr class="text-secondary small">
+                    <th>Código</th>
+                    <th>Denominación</th>
+                    <th>Dirección</th>
+                    <th>Observaciones</th>
+                    <th>Ficha Asociada</th>
+                    <th>Regional</th>
+                    <th class="text-center" width="160">Acciones</th>
+                </tr>
+                </thead>
+                <tbody>
+                @foreach($centros as $item)
+                    <tr>
+                        <td class="fw-bold text-dark">{{ $item->Codigo }}</td>
+                        <td>{{ $item->Denominacion }}</td>
+                        <td class="small">{{ $item->Direccion }}</td>
+                        <td class="text-muted small">{{ $item->Observaciones }}</td>
+                        {{-- Mantenemos tu lógica de relaciones --}}
+                        <td class="small">
+                            {{ $item->ficha->Codigo ?? 'N/A' }} - {{ $item->ficha->Denominacion ?? '' }}
+                        </td>
+                        <td class="small text-success fw-bold">
+                            {{ $item->regional->Denominacion ?? 'Sin asignar' }}
+                        </td>
+                        <td class="text-center">
+                            <div class="d-flex justify-content-center gap-1">
+                                {{-- Botones de Iconos (Igual a Tipos de Documentos y Roles) --}}
+                                <a href="{{ route('Centrosdeformacion.show', $item->NIS) }}"
+                                   class="btn btn-sm btn-info text-white shadow-sm" title="Ver Detalle">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+
+                                <a href="{{ route('Centrosdeformacion.edit', $item->NIS) }}"
+                                   class="btn btn-sm btn-warning text-dark shadow-sm" title="Editar">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+
+                                <form action="{{ route('Centrosdeformacion.destroy', $item->NIS) }}" method="POST" class="d-inline">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-sm btn-danger shadow-sm"
+                                            onclick="return confirm('¿Deseas eliminar este Centro de Formación?')">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                @endforeach
+                </tbody>
+            </table>
+        </div>
     </div>
-
-
-    <div style="margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center;">
-        <a href="{{ route('Centrosdeformacion.create') }}"
-           style="background: #39a900; color: white; padding: 10px 20px; text-decoration: none; border-radius: 4px; font-weight: bold;">
-            + Crear Nuevo
-        </a>
-    </div>
-
-    <table border="1" style="width: 100%; border-collapse: collapse;">
-        <thead>
-        <tr style="background-color: #39a900; color: white;">
-            <th>Código</th>
-            <th>Denominación</th>
-            <th>Dirección</th>
-            <th>Observaciones</th>
-            <th>Ficha Asociada</th>
-            <th>Regional</th>
-            <th style="text-align: center;">Acciones</th>
-        </tr>
-
-        </thead>
-        <tbody>
-        @foreach($centros as $item)
-            <tr>
-                <td>{{ $item->Codigo }}</td>
-                <td>{{ $item->Denominacion }}</td>
-                <td>{{ $item->Direccion }}</td>
-                <td>{{ $item->Observaciones }}</td>
-                <td>{{ $centro->ficha->Codigo ?? 'N/A' }} - {{ $centro->ficha->Denominacion ?? '' }}</td>
-                <td>{{ $centro->regional->Denominacion ?? 'Sin asignar' }}</td>
-                <td style="text-align: center;">
-                    <form action="{{ route('Centrosdeformacion.destroy', $item->NIS) }}" method="POST">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="btn-delete"
-                                onclick="return confirm('¿Deseas eliminar este Centro de Formación?')">
-                            Eliminar
-                        </button>
-
-                        <a href="{{ route('Centrosdeformacion.edit', $item->NIS) }}"
-                           style="background: #ffc107; color: black; padding: 5px 10px; text-decoration: none; border-radius: 3px; font-size: 13px;">Editar</a>
-
-                        <a href="{{ route('Centrosdeformacion.show', $item->NIS) }}"
-                           style="background: #07ffcd; color: black; padding: 5px 10px; text-decoration: none; border-radius: 3px; font-size: 13px;">Ver Detalle</a>
-
-                    </form>
-                </td>
-            </tr>
-        @endforeach
-        </tbody>
-    </table>
-
 @endsection

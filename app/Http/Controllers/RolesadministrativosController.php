@@ -73,10 +73,8 @@ class RolesadministrativosController extends Controller
      */
     public function show($nis)
     {
-        // Buscamos el rol por su NIS
+        // Cambiamos el nombre a $rolesadministrativo para que coincida con tu vista
         $rol = \App\Models\Rolesadministrativos::findOrFail($nis);
-
-        // IMPORTANTE: El nombre en compact debe ser 'rol' (sin el $)
         return view('Rolesadministrativos.show', compact('rol'));
     }
 
@@ -93,11 +91,30 @@ class RolesadministrativosController extends Controller
     {
         $rol = \App\Models\Rolesadministrativos::findOrFail($nis);
 
-        $rol->Descripcion = $request->Descripcion;
+        $data = $request->validate([
+            'Descripcion'  => 'required|string|max:100',
+            'anexo_camara' => 'nullable|mimes:pdf|max:3072'
+        ]);
 
+        if ($request->hasFile('anexo_camara')) {
+            $rutaCarpeta = public_path('uploads/clientes/camara/');
+
+            // 1. Borrar el archivo viejo si existe para no llenar el disco
+            if ($rol->anexo_camara && file_exists($rutaCarpeta . $rol->anexo_camara)) {
+                unlink($rutaCarpeta . $rol->anexo_camara);
+            }
+
+            // 2. Subir el nuevo archivo
+            $nombreArchivo = 'cam_' . time() . '.' . $request->file('anexo_camara')->extension();
+            $request->file('anexo_camara')->move($rutaCarpeta, $nombreArchivo);
+
+            $rol->anexo_camara = $nombreArchivo;
+        }
+
+        $rol->Descripcion = $request->Descripcion;
         $rol->save();
 
-        return redirect()->route('Rolesadministrativos.index')->with('success', 'Rol actualizado con éxito');
+        return redirect()->route('Rolesadministrativos.index')->with('success', 'Rol y documento actualizados con éxito');
     }
 
     /**

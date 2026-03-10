@@ -6,13 +6,10 @@ Route::get('/', function () {
     return view('Welcome');
 });
 
-
-// Usa esta única ruta para el dashboard
 use App\Http\Controllers\Dashboard;
 
 Route::get('/dashboard', [Dashboard::class, 'index'])->name('dashboard');
 
-// Si quieres que al entrar a la raíz (/) también vaya al dashboard:
 Route::get('/', [Dashboard::class, 'index']);
 
 
@@ -200,27 +197,29 @@ Route::get('/Fichasdecaracterizacion/{nis}/edit', [App\Http\Controllers\Fichasde
 
 
 
-Route::get('/Instructor/index', [\App\Http\Controllers\InstructorController::class, 'index'])
-    ->name('Instructor.index');
+Route::get('/instructor/index', [\App\Http\Controllers\InstructorController::class, 'index'])
+    ->name('instructor.index');
 
-Route::get('/Instructor/create', [App\Http\Controllers\InstructorController::class, 'create'])
-    ->name('Instructor.create');
+Route::get('/instructor/create', [App\Http\Controllers\InstructorController::class, 'create'])
+    ->name('instructor.create');
 
-Route::post('/Instructor/store', [App\Http\Controllers\InstructorController::class, 'store'])
-    ->name('Instructor.store');
+Route::post('/instructor/store', [App\Http\Controllers\InstructorController::class, 'store'])
+    ->name('instructor.store');
 
-Route::delete('/Instructor/{nis}', [\App\Http\Controllers\InstructorController::class, 'destroy'])
-    ->name('Instructor.destroy');
+Route::delete('/instructor/{nis}', [\App\Http\Controllers\InstructorController::class, 'destroy'])
+    ->name('instructor.destroy');
 
-Route::put('/Instructor/{nis}', [App\Http\Controllers\InstructorController::class, 'update'])
-    ->name('Instructor.update');
+Route::put('/instructor/{nis}', [App\Http\Controllers\InstructorController::class, 'update'])
+    ->name('instructor.update');
 
-Route::get('/Instructor/{nis}', [App\Http\Controllers\InstructorController::class, 'show'])
-    ->name('Instructor.show');
+Route::get('/instructor/{nis}', [App\Http\Controllers\InstructorController::class, 'show'])
+    ->name('instructor.show');
 
-Route::get('/Instructor/{nis}/edit', [App\Http\Controllers\InstructorController::class, 'edit'])
-    ->name('Instructor.edit');
+Route::get('/instructor/{nis}/edit', [App\Http\Controllers\InstructorController::class, 'edit'])
+    ->name('instructor.edit');
 
+
+Route::resource('instructor', \App\Http\Controllers\InstructorController::class);
 
 
 Route::get('/Centrosdeformacion/create', [App\Http\Controllers\CentrosdeformacionController::class, 'create'])

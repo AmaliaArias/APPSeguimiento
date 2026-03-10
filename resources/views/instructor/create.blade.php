@@ -4,7 +4,7 @@
     <div class="container">
         <div class="card">
             <div class="card-header"><h3>Registrar Nuevo Instructor</h3></div>
-            <form action="{{ route('Instructor.store') }}" method="POST">
+            <form action="{{ route('instructor.store') }}" method="POST">
                 @csrf
                 <div class="card-body">
                     <div class="row">
@@ -90,7 +90,7 @@
 
                 <div class="card-footer">
                     <button type="submit" class="btn btn-success" style="background-color: #39a900;">Guardar Instructor</button>
-                    <a href="{{ route('Instructor.index') }}" class="btn btn-secondary">Cancelar</a>
+                    <a href="{{ route('instructor.index') }}" class="btn btn-secondary">Cancelar</a>
                 </div>
             </form>
         </div>

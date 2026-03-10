@@ -1,32 +1,46 @@
-
 @extends('layouts.app')
 
 @section('contenido')
-    <div style="max-width: 700px; margin: 20px auto; background: white; padding: 30px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); font-family: sans-serif;">
-        <h2 style="color: #39a900; border-bottom: 2px solid #39a900; padding-bottom: 10px;">
-            Información de la Regional
-        </h2>
+    <div class="container py-4">
+        <div class="row justify-content-center">
+            <div class="col-md-7">
+                <div class="card shadow-sm border-0" style="border-radius: 15px;">
+                    <div class="card-header bg-white border-0 pt-4">
+                        <h2 class="fw-bold text-success mb-0">Información del Tipo de Documento</h2>
+                        <hr style="border-top: 3px solid #39a900; width: 60px;">
+                    </div>
 
-        <div style="margin-top: 25px; display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-            <div>
-                <p style="margin: 0;"><strong>NIS:</strong></p>
-                <p style="background: #f9f9f9; padding: 8px; border-radius: 4px;">{{ $tipodocumento->NIS }}</p>
+                    <div class="card-body p-4">
+                        <div class="row mb-3">
+                            <div class="col-sm-4 fw-bold text-secondary">NIS:</div>
+                            <div class="col-sm-8 bg-light p-2 rounded">{{ $tipodocumento->NIS }}</div>
+                        </div>
 
-                <p style="margin: 0;"><strong>Denominacion:</strong></p>
-                <p style="background: #f9f9f9; padding: 8px; border-radius: 4px;">{{ $tipodocumento->Denominacion }}</p>
+                        <div class="row mb-3">
+                            <div class="col-sm-4 fw-bold text-secondary">Denominación:</div>
+                            <div class="col-sm-8 bg-light p-2 rounded text-dark fw-bold">
+                                {{ $tipodocumento->Denominacion }}
+                            </div>
+                        </div>
+
+                        <div class="row mb-4">
+                            <div class="col-sm-4 fw-bold text-secondary">Observaciones:</div>
+                            <div class="col-sm-8 bg-light p-3 rounded" style="min-height: 80px;">
+                                {{ $tipodocumento->Observaciones }}
+                            </div>
+                        </div>
+
+                        <div class="d-flex gap-2 border-top pt-4">
+                            <a href="{{ route('Tiposdocumentos.index') }}" class="btn btn-secondary px-4">
+                                <i class="fas fa-arrow-left me-1"></i> Volver a la Lista
+                            </a>
+                            <a href="{{ route('Tiposdocumentos.edit', $tipodocumento->NIS) }}" class="btn btn-warning px-4 fw-bold">
+                                <i class="fas fa-edit me-1"></i> Editar Registro
+                            </a>
+                        </div>
+                    </div>
+                </div>
             </div>
-
-        <div style="margin-top: 20px;">
-            <p style="margin: 0;"><strong>Observaciones:</strong></p>
-            <div style="background: #f4f4f4; padding: 15px; border-radius: 5px; min-height: 80px; border-left: 5px solid #39a900; margin-top: 5px;">
-                {{ $tipodocumento->Observaciones ?: 'No hay observaciones para este Tipo de Documento.' }}
-            </div>
-        </div>
-
-        <div style="margin-top: 30px; display: flex; gap: 10px;">
-            <a href="{{ route('Tiposdocumentos.index') }}" style="background: #666; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; font-weight: bold;">Volver a la Lista</a>
-            <a href="{{ route('Tiposdocumentos.edit', $tipodocumento->NIS) }}" style="background: #ffc107; color: black; padding: 10px 20px; text-decoration: none; border-radius: 5px; font-weight: bold;">Editar Regional</a>
         </div>
     </div>
 @endsection
-

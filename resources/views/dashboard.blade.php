@@ -103,7 +103,7 @@
                         </a>
                     </div>
                     <div class="col-12 col-sm-4">
-                        <a href="{{ route('Instructor.create') }}" class="quick-btn shadow-sm">
+                        <a href="{{ route('instructor.create') }}" class="quick-btn shadow-sm">
                             <i class="fas fa-user-plus fa-2x mb-2"></i><br>Vincular Instructor
                         </a>
                     </div>

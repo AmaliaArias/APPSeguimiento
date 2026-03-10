@@ -1,22 +1,67 @@
 @extends('layouts.app')
 
 @section('contenido')
-    <div style="max-width: 600px; margin: 20px auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
-        <h2 style="color: #39a900; border-bottom: 2px solid #39a900; padding-bottom: 10px;">Detalles del Programa</h2>
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-md-7">
+                {{-- Tarjeta blanca con sombra (Card) --}}
+                <div class="card shadow-sm border-0" style="border-radius: 15px;">
 
-        <div style="margin-top: 20px; line-height: 2;">
-            <p><strong>NIS:</strong> {{ $programa->NIS }}</p>
-            <p><strong>Código del Programa:</strong> {{ $programa->Codigo }}</p>
-            <p><strong>Denominación:</strong> {{ $programa->Denominacion }}</p>
-            <p><strong>Observaciones:</strong></p>
-            <div style="background: #f9f9f9; padding: 15px; border-radius: 5px; border-left: 4px solid #39a900;">
-                {{ $programa->Observaciones ?: 'Sin observaciones registradas.' }}
+                    {{-- Encabezado con línea institucional --}}
+                    <div class="card-header bg-white border-0 pt-4 px-4">
+                        <h2 class="fw-bold text-success mb-0">
+                            <i class="fas fa-info-circle me-2"></i>Detalles del Programa
+                        </h2>
+                        <hr style="border-top: 3px solid #39a900; width: 60px; opacity: 1;">
+                    </div>
+
+                    <div class="card-body p-4">
+                        {{-- Fila para NIS y Código --}}
+                        <div class="row mb-4">
+                            <div class="col-sm-6">
+                                <label class="text-secondary fw-bold small uppercase">NIS:</label>
+                                <div class="p-2 bg-light rounded border-start border-4 border-success">
+                                    <span class="fw-bold text-dark">{{ $programa->NIS }}</span>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <label class="text-secondary fw-bold small uppercase">Código del Programa:</label>
+                                <div class="p-2 bg-light rounded">
+                                    <span class="text-dark">{{ $programa->Codigo }}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        {{-- Denominación --}}
+                        <div class="mb-4">
+                            <label class="text-secondary fw-bold small uppercase">Denominación:</label>
+                            <div class="p-3 bg-light rounded shadow-sm border">
+                                <h5 class="mb-0 fw-bold text-dark">{{ $programa->Denominacion }}</h5>
+                            </div>
+                        </div>
+
+                        {{-- Observaciones --}}
+                        <div class="mb-4">
+                            <label class="text-secondary fw-bold small uppercase">Observaciones:</label>
+                            <div class="p-3 bg-light rounded" style="min-height: 100px; border-left: 4px solid #ced4da;">
+                                <p class="mb-0 text-muted">
+                                    {{ $programa->Observaciones ?: 'Sin observaciones registradas.' }}
+                                </p>
+                            </div>
+                        </div>
+
+                        {{-- Botones de Acción (Mismo estilo que Roles Admin) --}}
+                        <div class="d-flex gap-2 border-top pt-4">
+                            <a href="{{ route('programasdeformacion.index') }}" class="btn btn-secondary px-4 fw-bold shadow-sm" style="border-radius: 8px;">
+                                <i class="fas fa-arrow-left me-1"></i> Volver a la lista
+                            </a>
+                            <a href="{{ route('programasdeformacion.edit', $programa->NIS) }}" class="btn btn-warning px-4 fw-bold shadow-sm" style="border-radius: 8px;">
+                                <i class="fas fa-edit me-1"></i> Editar Datos
+                            </a>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </div>
-
-        <div style="margin-top: 30px;">
-            <a href="{{ route('programasdeformacion.index') }}" style="background: #666; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">Volver a la lista</a>
-            <a href="{{ route('programasdeformacion.edit', $programa->NIS) }}" style="background: #ffc107; color: black; padding: 10px 20px; text-decoration: none; border-radius: 5px; margin-left: 10px;">Editar Datos</a>
         </div>
     </div>
 @endsection

@@ -1,26 +1,39 @@
 @extends('layouts.app')
 
 @section('contenido')
-    <div style="max-width: 700px; margin: 20px auto; background: white; padding: 30px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); font-family: sans-serif;">
-        <h2 style="color: #39a900; border-bottom: 2px solid #39a900; padding-bottom: 10px;">
-            Información de los Roles Administrativos
-        </h2>
+    <div class="card-custom mx-auto" style="max-width: 700px;">
+        <h2 class="fw-bold text-sena mb-4 border-bottom pb-2">Información del Rol Administrativo</h2>
 
-        <div style="margin-top: 25px; display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-            <div>
-                <p style="margin: 0;"><strong>NIS:</strong></p>
-                <p style="background: #f9f9f9; padding: 8px; border-radius: 4px;">{{ $rol->NIS }}</p>
-
-                <p style="margin: 0;"><strong>Descripción:</strong></p>
-                <p style="background: #f9f9f9; padding: 8px; border-radius: 4px;">{{ $rol->Descripcion }}</p>
-
-            </div>
-
+        <div class="row mb-3">
+            <div class="col-md-4 fw-bold text-secondary">NIS:</div>
+            <div class="col-md-8 bg-light p-2 rounded">{{ $rol->NIS }}</div>
         </div>
 
-        <div style="margin-top: 30px; display: flex; gap: 10px;">
-            <a href="{{ route('Rolesadministrativos.index') }}" style="background: #666; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; font-weight: bold;">Volver a la Lista</a>
-            <a href="{{ route('Rolesadministrativos.edit', $rol->NIS) }}" style="background: #ffc107; color: black; padding: 10px 20px; text-decoration: none; border-radius: 5px; font-weight: bold;">Editar Rol</a>
+        <div class="row mb-3">
+            <div class="col-md-4 fw-bold text-secondary">Descripción:</div>
+            <div class="col-md-8 bg-light p-2 rounded">{{ $rol->Descripcion }}</div>
+        </div>
+
+        <div class="row mb-4">
+            <div class="col-md-4 fw-bold text-secondary">Documento Anexo:</div>
+            <div class="col-md-8 bg-light p-2 rounded">
+                @if($rol->anexo_camara)
+                    <a href="{{ asset('uploads/clientes/camara/' . $rol->anexo_camara) }}" target="_blank" class="btn btn-sm btn-outline-danger">
+                        <i class="fas fa-file-pdf"></i> Ver Documento Adjunto
+                    </a>
+                @else
+                    <span class="text-muted italic">No se ha cargado ningún documento.</span>
+                @endif
+            </div>
+        </div>
+
+        <div class="d-flex gap-2 border-top pt-4">
+            <a href="{{ route('Rolesadministrativos.index') }}" class="btn btn-secondary">
+                <i class="fas fa-arrow-left"></i> Volver a la Lista
+            </a>
+            <a href="{{ route('Rolesadministrativos.edit', $rol->NIS) }}" class="btn btn-warning">
+                <i class="fas fa-edit"></i> Editar Rol
+            </a>
         </div>
     </div>
 @endsection

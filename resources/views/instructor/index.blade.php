@@ -6,17 +6,17 @@
         {{-- Encabezado --}}
         <div class="d-flex justify-content-between align-items-center mb-4">
             <div>
-                <h1 class="fw-bold text-dark mb-1">Lista de Aprendices</h1>
-                <p class="text-muted small">Administración detallada de registros de formación</p>
+                <h1 class="fw-bold text-dark mb-1">Lista de Instructores</h1>
+                <p class="text-muted small">Administración detallada de registros</p>
             </div>
-            <a href="{{ route('Aprendiz.create') }}" class="btn btn-sena shadow-sm px-4">
-                <i class="fas fa-plus-circle me-1"></i> Registrar Nuevo
+            <a href="{{ route('instructor.create') }}" class="btn btn-sena shadow-sm px-4">
+                <i class="fas fa-plus-circle me-1"></i> Crear Nuevo
             </a>
         </div>
 
         {{-- Barra de búsqueda --}}
         <div class="bg-light p-3 rounded-3 mb-4 border shadow-sm">
-            <form action="{{ route('Aprendiz.index') }}" method="GET" class="row g-2 align-items-center">
+            <form action="{{ route('instructor.index') }}" method="GET" class="row g-2 align-items-center">
                 <div class="col-md-6">
                     <input type="text" name="buscar" value="{{ $buscar }}" class="form-control" placeholder="Buscar por Nombre, documento...">
                 </div>
@@ -24,7 +24,7 @@
                     <button type="submit" class="btn btn-sena">Consultar</button>
                 </div>
                 <div class="col-auto">
-                    <a href="{{ route('Aprendiz.index') }}" class="btn btn-outline-secondary">Limpiar</a>
+                    <a href="{{ route('instructor.index') }}" class="btn btn-outline-secondary">Limpiar</a>
                 </div>
             </form>
         </div>
@@ -44,13 +44,15 @@
                     <th>Correo Personal</th>
                     <th>Sexo</th>
                     <th>Fecha Nac.</th>
+                    <th>Rol Admin.</th>
+                    <th>EPS</th>
                     <th class="text-center">Acciones</th>
                 </tr>
                 </thead>
                 <tbody>
-                @foreach($aprendices as $item)
+                @foreach($instructores as $item)
                     <tr>
-                        {{-- Muestra la Denominación del tipo de documento --}}
+                        {{-- Muestra la Denominación del tipo de documento en lugar del NIS --}}
                         <td>{{ $item->tipoDocumento->Denominacion ?? $item->Tdoc }}</td>
 
                         <td class="fw-bold">{{ $item->Numdoc }}</td>
@@ -61,30 +63,40 @@
                         <td><span class="text-sena small">{{ $item->CorreoInstitucional }}</span></td>
                         <td class="text-muted small">{{ $item->CorreoPersonal }}</td>
 
-                        {{-- Muestra Masculino o Femenino según el valor --}}
+                        {{-- Muestra Masculino o Femenino en lugar de 1 o 0 --}}
                         <td>
-                            @if($item->Sexo == 'M' || $item->Sexo == 1) Masculino
-                            @elseif($item->Sexo == 'F' || $item->Sexo == 0) Femenino
+                            @if($item->Sexo == 1) Masculino
+                            @elseif($item->Sexo == 0) Femenino
                             @else {{ $item->Sexo }}
                             @endif
                         </td>
 
                         <td>{{ $item->FechaNac }}</td>
 
+                        {{-- Muestra el nombre del Rol en lugar del número (NIS) --}}
+                        <td>
+                            <span class="badge bg-success text-white">
+                                {{ $item->rol->Denominacion ?? 'Sin Rol' }}
+                            </span>
+                        </td>
+
+                        {{-- Muestra el nombre de la EPS en lugar del número (NIS) --}}
+                        <td>{{ $item->eps->Denominacion ?? 'Sin EPS' }}</td>
+
                         <td class="text-center">
                             <div class="btn-group shadow-sm" role="group">
-                                <a href="{{ route('Aprendiz.show', $item->NIS) }}" class="btn btn-sm btn-info text-white" title="Ver Detalle">
+                                <a href="{{ route('instructor.show', $item->NIS) }}" class="btn btn-sm btn-info text-white" title="Ver Detalle">
                                     <i class="fas fa-eye"></i>
                                 </a>
 
-                                <a href="{{ route('Aprendiz.edit', $item->NIS) }}" class="btn btn-sm btn-warning text-dark" title="Editar">
+                                <a href="{{ route('instructor.edit', $item->NIS) }}" class="btn btn-sm btn-warning text-dark" title="Editar">
                                     <i class="fas fa-edit"></i>
                                 </a>
 
-                                <form action="{{ route('Aprendiz.destroy', $item->NIS) }}" method="POST" class="d-inline">
+                                <form action="{{ route('instructor.destroy', $item->NIS) }}" method="POST" class="d-inline">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('¿Deseas eliminar este Aprendiz?')" title="Eliminar">
+                                    <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('¿Deseas eliminar este Instructor?')" title="Eliminar">
                                         <i class="fas fa-trash-alt"></i>
                                     </button>
                                 </form>
@@ -104,8 +116,5 @@
 
         .table-responsive::-webkit-scrollbar { height: 8px; }
         .table-responsive::-webkit-scrollbar-thumb { background: #39a900; border-radius: 10px; }
-
-        /* Efecto hover en filas */
-        .table-hover tbody tr:hover { background-color: rgba(57, 169, 0, 0.05); }
     </style>
 @endsection

@@ -24,4 +24,15 @@ class entecoformador extends Model
         'Telefono',
         'CorreoInstitucional'
     ];
+
+
+    // En app/Models/Entecoformador.php
+
+    public function tipoDocumento()
+    {
+        // Asumiendo que tu modelo se llama Tiposdocumentos y la llave foránea es Tdoc
+        return $this->belongsTo(Tiposdocumentos::class, 'Tdoc', 'NIS');
+    }
+
 }
+

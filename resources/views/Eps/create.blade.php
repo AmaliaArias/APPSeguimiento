@@ -1,41 +1,84 @@
 @extends('layouts.app')
 
 @section('contenido')
-    <div class="container">
-        <div class="card">
-            <div class="card-header">
-                <h2>Registrar Nueva EPS</h2>
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-md-7">
+                {{-- Tarjeta principal con el estilo de bloques que te gusta --}}
+                <div class="card shadow-sm border-0" style="border-radius: 15px;">
+
+                    <div class="card-header bg-white border-0 pt-4 px-4">
+                        <h2 class="fw-bold text-success mb-0">
+                            <i class="fas fa-plus-circle me-2"></i>Registrar Nueva EPS
+                        </h2>
+                        <hr style="border-top: 3px solid #39a900; width: 60px; opacity: 1;">
+                        <p class="text-muted small mt-2">Ingrese la información básica para dar de alta una nueva Entidad Promotora de Salud.</p>
+                    </div>
+
+                    <form method="POST" action="{{ route('Eps.store') }}">
+                        @csrf
+                        <div class="card-body p-4">
+
+                            {{-- Bloque de Nombre de la EPS --}}
+                            <div class="mb-4">
+                                <label class="text-secondary fw-bold small text-uppercase text-muted">Nombre de la EPS:</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-white border-end-0"><i class="fas fa-hospital text-muted"></i></span>
+                                    <input type="text" name="Denominacion" id="Denominacion"
+                                           class="form-control border-sena border-start-0"
+                                           value="{{ old('Denominacion') }}"
+                                           placeholder="Ej: Sura, Sanitas, Nueva EPS..." required>
+                                </div>
+                            </div>
+
+                            <div class="row mb-4">
+                                {{-- Número de Documento --}}
+                                <div class="col-12">
+                                    <label class="text-secondary fw-bold small text-uppercase text-muted">Número de Documento (NIT):</label>
+                                    <div class="p-3 bg-light rounded border-start border-4 border-info shadow-sm">
+                                        <input type="text" name="Numdoc" id="Numdoc"
+                                               class="form-control border-0 bg-transparent fw-bold"
+                                               value="{{ old('Numdoc') }}"
+                                               placeholder="Ej: 800.123.456-1" required
+                                               style="box-shadow: none; font-size: 1.1rem;">
+                                    </div>
+                                    <small class="text-muted mt-1 d-block"><i class="fas fa-info-circle me-1"></i>Incluya el dígito de verificación si es necesario.</small>
+                                </div>
+                            </div>
+
+                            {{-- Bloque de Observaciones --}}
+                            <div class="mb-4">
+                                <label class="text-secondary fw-bold small text-uppercase text-muted">Observaciones:</label>
+                                <div class="p-2 bg-light rounded" style="border-left: 4px solid #ced4da;">
+                                    <textarea name="Observaciones" id="Observaciones"
+                                              class="form-control border-0 bg-transparent"
+                                              rows="4"
+                                              placeholder="Escriba aquí detalles adicionales o convenios específicos...">{{ old('Observaciones') }}</textarea>
+                                </div>
+                            </div>
+
+                            {{-- Botones de Acción --}}
+                            <div class="d-flex gap-2 border-top pt-4 mt-2">
+                                <button type="submit" class="btn btn-sena px-5 fw-bold shadow-sm" style="border-radius: 8px;">
+                                    <i class="fas fa-save me-1"></i> Guardar EPS
+                                </button>
+                                <a href="{{ route('Eps.index') }}" class="btn btn-outline-secondary px-4 fw-bold" style="border-radius: 8px;">
+                                    Cancelar
+                                </a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
             </div>
-
-            <form method="POST" action="{{ route('Eps.store') }}">
-                @csrf
-                <div class="card-body">
-                    <div class="row">
-
-                        <div class="form-group col-md-4">
-                            <label for="Numdoc">Número de Documento</label>
-                            <input type="text" name="Numdoc" id="Numdoc" class="form-control" value="{{ old('Numdoc') }}" placeholder="Ej: 800.123.456-1" required>
-                        </div>
-
-                        <div class="form-group col-md-8">
-                            <label for="Denominacion">Nombre de la EPS</label>
-                            <input type="text" name="Denominacion" id="Denominacion" class="form-control" value="{{ old('Denominacion') }}" placeholder="Ej: Sura, Sanitas, etc." required>
-                        </div>
-                    </div>
-
-                    <div class="form-group" style="margin-top: 15px;">
-                        <label for="Observaciones">Observaciones</label>
-                        <textarea name="Observaciones" id="Observaciones" class="form-control" rows="3">{{ old('Observaciones') }}</textarea>
-                    </div>
-                </div>
-
-                <div class="card-footer" style="margin-top: 20px;">
-                    <button type="submit" style="background-color: #39a900; color: white; padding: 10px 25px; border: none; border-radius: 4px; font-weight: bold;">
-                        Guardar EPS
-                    </button>
-                    <a href="{{ route('Eps.index') }}" style="margin-left: 10px; color: #666; text-decoration: none;">Cancelar</a>
-                </div>
-            </form>
         </div>
     </div>
+
+    <style>
+        .text-sena { color: #39a900; }
+        .btn-sena { background-color: #39a900; color: white; border: none; transition: 0.3s; }
+        .btn-sena:hover { background-color: #2d8500; color: white; transform: translateY(-2px); }
+        .border-sena:focus { border-color: #39a900; box-shadow: 0 0 0 0.25rem rgba(57, 169, 0, 0.15); }
+        .form-control:focus { outline: none !important; box-shadow: none; }
+        .input-group-text { border-color: #dee2e6; }
+    </style>
 @endsection

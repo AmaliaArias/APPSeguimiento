@@ -28,11 +28,13 @@
 
                                         <div class="mb-3">
                                             <label class="form-label small fw-bold">Tipo de Documento</label>
-                                            <select name="Tdoc" class="form-select border-0 bg-white shadow-sm" required>
-                                                <option value="" disabled selected>Seleccione...</option>
-                                                <option value="CC">Cédula de Ciudadanía</option>
-                                                <option value="TI">Tarjeta de Identidad</option>
-                                                <option value="PEP">Pasaporte / PEP</option>
+                                            <select name="tbl_tiposdocumentos_NIS" class="form-select border-0 bg-white shadow-sm" required>
+                                                <option value="" disabled selected>Seleccione el tipo...</option>
+                                                @foreach($tiposDoc as $tipo)
+                                                    <option value="{{ $tipo->NIS }}" {{ old('tbl_tiposdocumentos_NIS') == $tipo->NIS ? 'selected' : '' }}>
+                                                        {{ $tipo->Denominacion }}
+                                                    </option>
+                                                @endforeach
                                             </select>
                                         </div>
 
@@ -46,15 +48,15 @@
                                             <div class="col-6">
                                                 <label class="form-label small fw-bold">Sexo</label>
                                                 <select name="Sexo" class="form-select border-0 bg-white shadow-sm">
-                                                    <option value="M">Masculino</option>
-                                                    <option value="F">Femenino</option>
-                                                    <option value="O">Otro</option>
+                                                    <option value="1" {{ old('Sexo') == '1' ? 'selected' : '' }}>Masculino</option>
+                                                    <option value="0" {{ old('Sexo') == '0' ? 'selected' : '' }}>Femenino</option>
+                                                    <option value="2" {{ old('Sexo') == '2' ? 'selected' : '' }}>Otro</option>
                                                 </select>
                                             </div>
                                             <div class="col-6">
                                                 <label class="form-label small fw-bold">F. Nacimiento</label>
-                                                <input type="date" name="FechaNacimiento" class="form-control border-0 bg-white shadow-sm"
-                                                       value="{{ old('FechaNacimiento') }}">
+                                                <input type="date" name="FechaNac" class="form-control border-0 bg-white shadow-sm"
+                                                       value="{{ old('FechaNac') }}">
                                             </div>
                                         </div>
                                     </div>
@@ -88,13 +90,44 @@
                                     </div>
                                 </div>
 
-                                {{-- BLOQUE 3: Correos y Dirección (Borde Gris/Ancho Completo) --}}
+                                {{-- BLOQUE 3: Vinculación Académica y Salud (Borde Naranja) --}}
+                                <div class="col-12">
+                                    <div class="p-4 bg-light rounded border-start border-4 border-warning shadow-sm">
+                                        <h6 class="fw-bold text-warning mb-3 text-uppercase small">Vinculación Académica y Salud</h6>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <label class="form-label small fw-bold">Ficha de Caracterización</label>
+                                                <select name="tbl_fichasdecaracterizacion_NIS" class="form-select border-0 bg-white shadow-sm" required>
+                                                    <option value="" disabled selected>Asignar a una ficha...</option>
+                                                    @foreach($fichas as $ficha)
+                                                        <option value="{{ $ficha->NIS }}" {{ old('tbl_fichasdecaracterizacion_NIS') == $ficha->NIS ? 'selected' : '' }}>
+                                                            {{ $ficha->Codigo }} - {{ $ficha->Denominacion }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label class="form-label small fw-bold">EPS Asociada</label>
+                                                <select name="tbl_eps_NIS" class="form-select border-0 bg-white shadow-sm" required>
+                                                    <option value="" disabled selected>Seleccione la EPS...</option>
+                                                    @foreach($eps as $e)
+                                                        <option value="{{ $e->NIS }}" {{ old('tbl_eps_NIS') == $e->NIS ? 'selected' : '' }}>
+                                                            {{ $e->Denominacion }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {{-- BLOQUE 4: Correos y Dirección (Borde Gris) --}}
                                 <div class="col-12">
                                     <div class="p-4 bg-light rounded border-start border-4 border-secondary shadow-sm">
                                         <h6 class="fw-bold text-secondary mb-3 text-uppercase small">Información de Localización y Correo</h6>
                                         <div class="row">
                                             <div class="col-md-4">
-                                                <label class="form-label small fw-bold">Correo Institucional (@soy.sena)</label>
+                                                <label class="form-label small fw-bold">Correo Institucional</label>
                                                 <input type="email" name="CorreoInstitucional" class="form-control border-0 bg-white shadow-sm"
                                                        placeholder="ejemplo@soy.sena.edu.co" required value="{{ old('CorreoInstitucional') }}">
                                             </div>
@@ -134,5 +167,6 @@
         .btn-sena:hover { background-color: #2d8500; color: white; transform: translateY(-2px); }
         .form-control:focus, .form-select:focus { box-shadow: 0 4px 10px rgba(0,0,0,0.05) !important; border: 1px solid #39a900 !important; }
         .input-group-text { border-radius: 0.375rem 0 0 0.375rem; }
+        .border-warning { border-color: #ffc107 !important; }
     </style>
 @endsection

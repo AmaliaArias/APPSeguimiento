@@ -3,7 +3,7 @@
 @section('contenido')
     <div class="card-custom shadow-sm p-4 bg-white rounded-4">
 
-        {{-- Encabezado --}}
+        {{-- Encabezado Estilo Instructor --}}
         <div class="d-flex justify-content-between align-items-center mb-4">
             <div>
                 <h1 class="fw-bold text-dark mb-1">Lista de Aprendices</h1>
@@ -21,7 +21,7 @@
                     <input type="text" name="buscar" value="{{ $buscar }}" class="form-control" placeholder="Buscar por Nombre, documento...">
                 </div>
                 <div class="col-auto">
-                    <button type="submit" class="btn btn-sena">Consultar</button>
+                    <button type="submit" class="btn btn-sena px-4">Consultar</button>
                 </div>
                 <div class="col-auto">
                     <a href="{{ route('Aprendiz.index') }}" class="btn btn-outline-secondary">Limpiar</a>
@@ -29,20 +29,21 @@
             </form>
         </div>
 
-        {{-- Tabla Responsiva --}}
+        {{-- Tabla Responsiva con campos exactos de tu DB --}}
         <div class="table-responsive rounded-3 border">
-            <table class="table table-hover align-middle mb-0" style="min-width: 1500px;">
+            <table class="table table-hover align-middle mb-0" style="min-width: 1600px;">
                 <thead class="table-light">
                 <tr class="text-sena small text-uppercase fw-bold">
                     <th>T. Documento</th>
                     <th>Documento</th>
                     <th>Nombres</th>
                     <th>Apellidos</th>
+                    <th>Ficha</th> {{-- Nuevo campo según tu DB --}}
                     <th>Dirección</th>
                     <th>Teléfono</th>
                     <th>Correo Institucional</th>
-                    <th>Correo Personal</th>
                     <th>Sexo</th>
+                    <th>EPS</th> {{-- Nuevo campo según tu DB --}}
                     <th>Fecha Nac.</th>
                     <th class="text-center">Acciones</th>
                 </tr>
@@ -50,24 +51,35 @@
                 <tbody>
                 @foreach($aprendices as $item)
                     <tr>
-                        {{-- Muestra la Denominación del tipo de documento --}}
-                        <td>{{ $item->tipoDocumento->Denominacion ?? $item->Tdoc }}</td>
+                        {{-- Relación con tbl_tiposdocumentos_NIS --}}
+                        <td>{{ $item->tipoDocumento->Denominacion ?? 'ID: '.$item->Tdoc }}</td>
 
-                        <td class="fw-bold">{{ $item->Numdoc }}</td>
+                        <td class="fw-bold text-dark">{{ $item->Numdoc }}</td>
                         <td>{{ $item->Nombres }}</td>
                         <td>{{ $item->Apellidos }}</td>
-                        <td><small class="text-muted">{{ $item->Direccion }}</small></td>
-                        <td>{{ $item->Telefono }}</td>
-                        <td><span class="text-sena small">{{ $item->CorreoInstitucional }}</span></td>
-                        <td class="text-muted small">{{ $item->CorreoPersonal }}</td>
 
-                        {{-- Muestra Masculino o Femenino según el valor --}}
+                        {{-- Relación con tbl_fichasdecaracterizacion_NIS --}}
                         <td>
-                            @if($item->Sexo == 'M' || $item->Sexo == 1) Masculino
-                            @elseif($item->Sexo == 'F' || $item->Sexo == 0) Femenino
+                            <span class="badge bg-light text-dark border">
+                                <i class="fas fa-id-card me-1 text-sena"></i>
+                                {{ $item->ficha->Codigo ?? 'Sin Ficha' }}
+                            </span>
+                        </td>
+
+                        <td><small class="text-muted">{{ Str::limit($item->Direccion, 25) }}</small></td>
+                        <td>{{ $item->Telefono }}</td>
+                        <td><span class="text-sena small fw-bold">{{ $item->CorreoInstitucional }}</span></td>
+
+                        {{-- Sexo (asumiendo 1=M, 0=F según tu lógica de Instructor) --}}
+                        <td>
+                            @if($item->Sexo == 1) <span class="text-primary"><i class="fas fa-mars"></i> M</span>
+                            @elseif($item->Sexo == 0) <span class="text-danger"><i class="fas fa-venus"></i> F</span>
                             @else {{ $item->Sexo }}
                             @endif
                         </td>
+
+                        {{-- Relación con tbl_eps_NIS --}}
+                        <td><small class="fw-bold">{{ $item->eps->Denominacion ?? 'N/A' }}</small></td>
 
                         <td>{{ $item->FechaNac }}</td>
 
@@ -99,13 +111,10 @@
 
     <style>
         .text-sena { color: #39a900; }
-        .btn-sena { background-color: #39a900; color: white; border: none; }
+        .btn-sena { background-color: #39a900; color: white; border: none; font-weight: bold; }
         .btn-sena:hover { background-color: #2d8500; color: white; }
-
+        .table-hover tbody tr:hover { background-color: rgba(57, 169, 0, 0.05); }
         .table-responsive::-webkit-scrollbar { height: 8px; }
         .table-responsive::-webkit-scrollbar-thumb { background: #39a900; border-radius: 10px; }
-
-        /* Efecto hover en filas */
-        .table-hover tbody tr:hover { background-color: rgba(57, 169, 0, 0.05); }
     </style>
 @endsection

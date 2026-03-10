@@ -15,7 +15,7 @@
                                 </h2>
                                 <hr style="border-top: 3px solid #39a900; width: 60px; opacity: 1;">
                             </div>
-                            <span class="badge bg-success px-3 py-2 rounded-pill">Estado: Vinculado</span>
+                            <span class="badge bg-success px-3 py-2 rounded-pill">Estado: Activo</span>
                         </div>
                     </div>
 
@@ -28,37 +28,65 @@
                                 <div class="p-3 bg-light rounded border-start border-4 border-info shadow-sm h-100">
                                     <p class="mb-2"><strong>Nombres:</strong> <span class="text-dark">{{ $aprendiz->Nombres }}</span></p>
                                     <p class="mb-2"><strong>Apellidos:</strong> <span class="text-dark">{{ $aprendiz->Apellidos }}</span></p>
-                                    <p class="mb-2"><strong>Tipo Doc:</strong> <span class="text-dark">{{ $tipoDoc->Denominacion ?? 'N/A' }}</span></p>
+                                    <p class="mb-2"><strong>Tipo Doc:</strong> <span class="text-dark">{{ $aprendiz->tipoDocumento->Denominacion ?? 'N/A' }}</span></p>
                                     <p class="mb-2"><strong>Número:</strong> <span class="fw-bold text-primary">{{ $aprendiz->Numdoc }}</span></p>
                                     <p class="mb-2"><strong>Sexo:</strong>
-                                        <span class="badge {{ $aprendiz->Sexo == 'M' ? 'bg-primary' : 'bg-danger' }} bg-opacity-10 {{ $aprendiz->Sexo == 'M' ? 'text-primary' : 'text-danger' }}">
-                                            {{ $aprendiz->Sexo == 'M' ? 'Masculino' : 'Femenino' }}
+                                        <span class="badge {{ $aprendiz->Sexo == 1 ? 'bg-primary' : 'bg-danger' }} bg-opacity-10 {{ $aprendiz->Sexo == 1 ? 'text-primary' : 'text-danger' }}">
+                                            {{ $aprendiz->Sexo == 1 ? 'Masculino' : 'Femenino' }}
                                         </span>
                                     </p>
                                     <p class="mb-0"><strong>F. Nacimiento:</strong> <span class="text-dark">{{ $aprendiz->FechaNac }}</span></p>
                                 </div>
                             </div>
 
-                            {{-- Bloque 2: Contacto (Borde Verde) --}}
+                            {{-- Bloque 2: Vinculación Institucional (Borde Naranja) --}}
                             <div class="col-md-6">
-                                <label class="text-secondary fw-bold small text-uppercase text-muted mb-2">Contacto y Ubicación:</label>
-                                <div class="p-3 bg-light rounded border-start border-4 border-success shadow-sm h-100">
-                                    <p class="mb-2"><strong>Dirección:</strong> <br><span class="text-dark">{{ $aprendiz->Direccion }}</span></p>
-                                    <p class="mb-2"><strong>Teléfono:</strong> <br><span class="text-dark">{{ $aprendiz->Telefono }}</span></p>
-                                    <p class="mb-2">
-                                        <strong>Correo Institucional:</strong><br>
-                                        <a href="mailto:{{ $aprendiz->CorreoInstitucional }}" class="text-decoration-none fw-bold text-success small">
-                                            {{ $aprendiz->CorreoInstitucional }}
-                                        </a>
+                                <label class="text-secondary fw-bold small text-uppercase text-muted mb-2">Vinculación y Salud:</label>
+                                <div class="p-3 bg-light rounded border-start border-4 border-warning shadow-sm h-100">
+                                    <p class="mb-3">
+                                        <strong class="d-block text-muted small text-uppercase">Ficha de Caracterización:</strong>
+                                        <span class="fw-bold text-dark" style="font-size: 1.1rem;">
+                                            <i class="fas fa-users text-warning me-1"></i>
+                                            {{ $aprendiz->ficha->Codigo ?? 'Sin asignar' }}
+                                        </span>
+                                        <br>
+                                        <small class="text-muted">{{ $aprendiz->ficha->Denominacion ?? '' }}</small>
                                     </p>
                                     <p class="mb-0">
-                                        <strong>Correo Personal:</strong><br>
-                                        <span class="small text-muted">{{ $aprendiz->CorreoPersonal }}</span>
+                                        <strong class="d-block text-muted small text-uppercase">Entidad de Salud (EPS):</strong>
+                                        <span class="text-dark fw-bold">
+                                            <i class="fas fa-heartbeat text-danger me-1"></i>
+                                            {{ $aprendiz->eps->Denominacion ?? 'No registrada' }}
+                                        </span>
                                     </p>
                                 </div>
                             </div>
 
-                            {{-- Bloque 3: Sistema (Borde Gris) --}}
+                            {{-- Bloque 3: Contacto (Borde Verde) --}}
+                            <div class="col-12">
+                                <label class="text-secondary fw-bold small text-uppercase text-muted mb-2">Contacto y Ubicación:</label>
+                                <div class="p-3 bg-light rounded border-start border-4 border-success shadow-sm">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <p class="mb-0"><strong>Dirección:</strong> <br><span class="text-dark">{{ $aprendiz->Direccion }}</span></p>
+                                        </div>
+                                        <div class="col-md-4 border-start">
+                                            <p class="mb-0"><strong>Teléfono:</strong> <br><span class="text-dark">{{ $aprendiz->Telefono }}</span></p>
+                                        </div>
+                                        <div class="col-md-4 border-start">
+                                            <p class="mb-1"><strong>Correos:</strong></p>
+                                            <a href="mailto:{{ $aprendiz->CorreoInstitucional }}" class="d-block text-decoration-none fw-bold text-success small mb-1">
+                                                <i class="fas fa-university me-1"></i>{{ $aprendiz->CorreoInstitucional }}
+                                            </a>
+                                            <span class="small text-muted d-block">
+                                                <i class="fas fa-envelope me-1"></i>{{ $aprendiz->CorreoPersonal }}
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {{-- Bloque 4: Sistema (Borde Gris) --}}
                             <div class="col-12">
                                 <div class="p-3 rounded d-flex align-items-center shadow-sm" style="background: #f8f9fa; border-left: 4px solid #ced4da;">
                                     <i class="fas fa-database text-muted me-3 fa-2x"></i>

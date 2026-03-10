@@ -110,12 +110,6 @@
                 </div>
             </div>
         </div>
-        <div class="col-12 col-lg-4">
-            <div class="bg-dark text-white p-4 rounded-4 shadow-sm h-100">
-                <h5>Centro de Ayuda</h5>
-                <p class="small opacity-75">Hoy es {{ date('d/m/Y') }}. Acceda a los manuales de usuario si tiene dudas.</p>
-                <button class="btn btn-success btn-sm w-100">Descargar Manual</button>
-            </div>
-        </div>
+
     </div>
 @endsection

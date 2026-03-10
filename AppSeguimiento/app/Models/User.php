@@ -2,47 +2,38 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
-    /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var list<string>
-     */
     protected $fillable = [
         'name',
         'email',
         'password',
+        'rol', // 'admin' o 'aprendiz'
+        'aprendiz_nis', // FK opcional hacia tbl_aprendiz
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var list<string>
-     */
     protected $hidden = [
         'password',
         'remember_token',
     ];
 
     /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
+     * Relación con el perfil de Aprendiz
+     * Solo se usará si el usuario tiene el rol 'aprendiz'
      */
-    protected function casts(): array
+    public function perfilAprendiz()
     {
-        return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-        ];
+        return $this->belongsTo(Aprendiz::class, 'aprendiz_nis', 'NIS');
+    }
+
+    // Función para verificar si es admin rápidamente
+    public function isAdmin() {
+        return $this->rol === 'admin';
     }
 }

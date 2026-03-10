@@ -17,8 +17,21 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+
+            // --- CAMPOS NUEVOS ---
+            $table->string('rol')->default('aprendiz'); // admin o aprendiz
+            // Usamos integer porque en tu tabla tbl_aprendiz el NIS es int AI PK
+            $table->integer('aprendiz_nis')->nullable()->unsigned();
+            // ---------------------
+
             $table->rememberToken();
             $table->timestamps();
+
+            // Relación con tu tabla de aprendices
+            $table->foreign('aprendiz_nis')
+                ->references('NIS')
+                ->on('tbl_aprendiz')
+                ->onDelete('set null'); // Si borras el aprendiz, el usuario queda pero sin vínculo
         });
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {

@@ -1,6 +1,20 @@
 @extends('layouts.app')
 
 @section('contenido')
+
+
+    <div class="d-flex justify-content-between align-items-center mb-4 p-3 bg-white rounded-3 shadow-sm border-start border-4" style="border-color: #39a900 !important;">
+        <div class="d-flex align-items-center">
+            <div class="bg-light rounded-circle p-2 me-3">
+                <i class="fas fa-user text-secondary"></i>
+            </div>
+            <div>
+                <h5 class="mb-0 fw-bold text-dark">Hola, Amalia</h5>
+                <small class="text-muted">Bienvenida al panel de control</small>
+            </div>
+        </div>
+    </div>
+
     <style>
         .stat-card {
             border: none;
@@ -110,6 +124,5 @@
                 </div>
             </div>
         </div>
-
     </div>
 @endsection

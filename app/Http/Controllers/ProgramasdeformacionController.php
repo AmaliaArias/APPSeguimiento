@@ -68,7 +68,7 @@ class ProgramasdeformacionController extends Controller
         $programa = \App\Models\programasdeformacion::findOrFail($nis);
 
         // Retornamos la vista pasándole el objeto
-        return view('Programasdeformacion.show', compact('programa'));
+        return view('programasdeformacion.show', compact('programa'));
     }
 
     /**
@@ -78,7 +78,7 @@ class ProgramasdeformacionController extends Controller
     {
         // Buscamos el programa por su NIS para llenar el formulario
         $programa = \App\Models\programasdeformacion::findOrFail($nis);
-        return view('Programasdeformacion.edit', compact('programa'));
+        return view('programasdeformacion.edit', compact('programa'));
     }
 
     /**

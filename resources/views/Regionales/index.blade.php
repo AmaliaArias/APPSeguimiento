@@ -9,7 +9,7 @@
                 <h1 class="fw-bold text-dark mb-1">Lista de Regionales</h1>
                 <p class="text-muted small">Administración de sedes regionales del SENA</p>
             </div>
-            <a href="{{ route('regionales.create') }}" class="btn btn-sena shadow-sm px-4">
+            <a href="{{ route('Regionales.create') }}" class="btn btn-sena shadow-sm px-4">
                 <i class="fas fa-plus-circle me-1"></i> Crear Nuevo
             </a>
         </div>

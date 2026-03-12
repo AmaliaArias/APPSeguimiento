@@ -14,15 +14,35 @@
         /* Header Institucional */
         header {
             background-color: white;
-            padding: 12px 25px;
+            padding: 8px 25px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 4px solid #39a900; /* Verde SENA */
+            border-bottom: 4px solid #39a900;
             box-shadow: 0 2px 4px rgba(0,0,0,0.05);
         }
 
-        /* Navegación - Corregido el color para que se vea profesional */
+        /* Estilo para el Menú de Usuario */
+        .user-menu-btn {
+            background: none;
+            border: none;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 5px 10px;
+            border-radius: 8px;
+            transition: background 0.2s;
+            text-decoration: none;
+        }
+        .user-menu-btn:hover { background-color: #f1f8ed; }
+        .user-menu-btn::after { display: none; } /* Quita la flechita de Bootstrap */
+
+        .role-text {
+            text-align: right;
+            line-height: 1.2;
+        }
+
+        /* Navegación */
         .nav-sena {
             background: #2f3e4e;
             display: flex;
@@ -46,27 +66,17 @@
         }
 
         .nav-sena a:hover {
-            background: #39a900; /* Verde al pasar el mouse */
+            background: #39a900;
             color: white;
         }
 
-        /* Contenedor principal corregido */
         .main-content {
             padding: 30px;
             min-height: 80vh;
         }
 
-        /* Clases globales para tus botones y tablas */
-        .btn-sena { background-color: #39a900; color: white; border-radius: 6px; font-weight: 600; border: none; }
-        .btn-sena:hover { background-color: #2d8500; color: white; }
-
-        .card-custom {
-            background: white;
-            border-radius: 12px;
-            border: none;
-            box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
-            padding: 20px;
-        }
+        .dropdown-item i { width: 20px; color: #6c757d; }
+        .dropdown-item:hover i { color: #39a900; }
     </style>
 </head>
 <body>
@@ -76,8 +86,30 @@
         <i class="fas fa-leaf fa-2x me-2" style="color: #39a900;"></i>
         <span class="h3 mb-0 fw-bold" style="color: #39a900;">Seguimiento <span style="color: #2c3e50;">SENA</span></span>
     </a>
-    <div class="d-none d-md-block text-secondary">
-        <i class="fas fa-user-circle me-1"></i> Sistema de Gestión Documental
+
+    <div class="dropdown">
+        <button class="user-menu-btn dropdown-toggle" type="button" id="dropdownMenuUser" data-bs-toggle="dropdown" aria-expanded="false">
+            <div class="role-text d-none d-md-block">
+                <span class="d-block fw-bold text-dark" style="font-size: 0.9rem;">Sistema de Gestión</span>
+                <small class="text-muted" style="font-size: 0.75rem;">Rol: Administrador</small>
+            </div>
+            <i class="fas fa-user-circle fa-2x" style="color: #39a900;"></i>
+        </button>
+
+        <ul class="dropdown-menu dropdown-menu-end shadow border-0 mt-2" aria-labelledby="dropdownMenuUser">
+            <li><h6 class="dropdown-header">Opciones de Usuario</h6></li>
+            <li><a class="dropdown-item" href="#"><i class="fas fa-user-edit"></i> Editar Perfil</a></li>
+            <li><a class="dropdown-item" href="#"><i class="fas fa-user-tag"></i> Cambiar Rol</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li>
+                <form action="{{ route('logout') }}" method="POST" style="margin: 0;">
+                    @csrf
+                    <button type="submit" class="dropdown-item text-danger fw-bold">
+                        <i class="fas fa-sign-out-alt text-danger"></i> Cerrar Sesión
+                    </button>
+                </form>
+            </li>
+        </ul>
     </div>
 </header>
 
@@ -87,9 +119,9 @@
     <a href="{{ route('programasdeformacion.index') }}"><i class="fas fa-graduation-cap"></i> Programas</a>
     <a href="{{ route('Centrosdeformacion.index') }}"><i class="fas fa-landmark"></i> Centros</a>
     <a href="{{ route('instructor.index') }}"><i class="fas fa-chalkboard-teacher"></i> Instructores</a>
-    <a href="{{ route('Aprendiz.index') }}"><i class="fas fa-chalkboard-teacher"></i> Aprendices</a>
-    <a href="{{ route('Eps.index') }}"><i class="fas fa-chalkboard-teacher"></i> EPS</a>
-    <a href="{{ route('Regionales.index') }}"><i class="fas fa-chalkboard-teacher"></i> Regionales</a>
+    <a href="{{ route('Aprendiz.index') }}"><i class="fas fa-user-graduate"></i> Aprendices</a>
+    <a href="{{ route('Eps.index') }}"><i class="fas fa-hospital"></i> EPS</a>
+    <a href="{{ route('Regionales.index') }}"><i class="fas fa-map-marked-alt"></i> Regionales</a>
     <a href="{{ route('Entecoformador.index') }}"><i class="fas fa-handshake"></i> Entes</a>
     <a href="/Fichasdecaracterizacion/index"><i class="fas fa-users"></i> Fichas</a>
     <a href="/Rolesadministrativos/index"><i class="fas fa-user-shield"></i> Roles Admin.</a>
@@ -107,5 +139,6 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
 </body>
 </html>

@@ -82,7 +82,7 @@
 <body>
 
 <header>
-    <a href="{{ url('/') }}" class="text-decoration-none d-flex align-items-center">
+    <a href="{{ url('/dashboard') }}" class="text-decoration-none d-flex align-items-center">
         <i class="fas fa-leaf fa-2x me-2" style="color: #39a900;"></i>
         <span class="h3 mb-0 fw-bold" style="color: #39a900;">Seguimiento <span style="color: #2c3e50;">SENA</span></span>
     </a>
@@ -114,7 +114,7 @@
 </header>
 
 <nav class="nav-sena">
-    <a href="{{ url('/') }}"><i class="fas fa-home"></i> Inicio</a>
+    <a href="{{ url('/dashboard') }}"><i class="fas fa-home"></i> Inicio</a>
     <a href="{{ route('Tiposdocumentos.index') }}"><i class="fas fa-file-alt"></i> T. Documentos</a>
     <a href="{{ route('programasdeformacion.index') }}"><i class="fas fa-graduation-cap"></i> Programas</a>
     <a href="{{ route('Centrosdeformacion.index') }}"><i class="fas fa-landmark"></i> Centros</a>

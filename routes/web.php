@@ -13,6 +13,7 @@ use App\Http\Controllers\FichasdecaracterizacionController;
 use App\Http\Controllers\InstructorController;
 use App\Http\Controllers\CentrosdeformacionController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\BitacorasController;
 
 /*
 |--------------------------------------------------------------------------
@@ -29,6 +30,9 @@ Route::get('/', function () {
 Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::get('/dashboard', [Dashboard::class, 'index'])->name('dashboard');
+
+
+    Route::resource('Bitacoras', BitacorasController::class)->names('Bitacoras');
 
     // Módulos del Sistema - NORMALIZADOS
     Route::resource('Programasdeformacion', ProgramasdeformacionController::class)

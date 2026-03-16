@@ -14,7 +14,7 @@ use App\Http\Controllers\InstructorController;
 use App\Http\Controllers\CentrosdeformacionController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\BitacorasController;
-
+use App\Http\Controllers\Aprendiz\DashboardController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -33,6 +33,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
 
     Route::resource('Bitacoras', BitacorasController::class)->names('Bitacoras');
+
+    Route::get('/aprendiz/practicas', [DashboardController::class, 'index'])->name('aprendiz.dashboard');
+
+    // Esta es la que ya tenías (para ver el formulario)
+    Route::get('/aprendiz/registro-practica', [App\Http\Controllers\Aprendiz\PracticaController::class, 'create'])->name('practica.create');
+
+// AÑADE ESTA (para guardar los datos)
+    Route::post('/aprendiz/registro-practica', [App\Http\Controllers\Aprendiz\PracticaController::class, 'store'])->name('practica.store');
 
     // Módulos del Sistema - NORMALIZADOS
     Route::resource('Programasdeformacion', ProgramasdeformacionController::class)

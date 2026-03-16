@@ -125,7 +125,7 @@
     <a href="{{ route('Entecoformador.index') }}"><i class="fas fa-handshake"></i> Entes</a>
     <a href="/Fichasdecaracterizacion/index"><i class="fas fa-users"></i> Fichas</a>
     <a href="/Rolesadministrativos/index"><i class="fas fa-user-shield"></i> Roles Admin.</a>
-    <a href="/Bitacoras/index"><i class="fas fa-user-shield"></i> Bitacoras</a>
+    <a href="/Bitacoras"><i class="fas fa-user-shield"></i> Bitacoras</a>
 </nav>
 
 <div class="container main-content">

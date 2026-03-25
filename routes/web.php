@@ -64,7 +64,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/seguimiento/{nis}', [App\Http\Controllers\Instructor\InstructorController::class, 'verSeguimiento'])
             ->name('instructor.seguimiento');
     });
-
+    Route::put('/calificar-bitacora/{id}', [App\Http\Controllers\Instructor\InstructorController::class, 'calificar'])->name('instructor.calificar');
 
 
 

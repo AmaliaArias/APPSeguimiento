@@ -115,6 +115,8 @@
 
 <nav class="nav-sena">
     <a href="{{ url('/dashboard') }}"><i class="fas fa-home"></i> Inicio</a>
+    <a href="/aprendiz/practicas"><i class="fas fa-user-shield"></i> DashboardAprendices</a>
+    <a href="/instructor/dashboard"><i class="fas fa-user-shield"></i> DashboardInstructores</a>
     <a href="{{ route('Tiposdocumentos.index') }}"><i class="fas fa-file-alt"></i> T. Documentos</a>
     <a href="{{ route('programasdeformacion.index') }}"><i class="fas fa-graduation-cap"></i> Programas</a>
     <a href="{{ route('Centrosdeformacion.index') }}"><i class="fas fa-landmark"></i> Centros</a>
@@ -125,7 +127,8 @@
     <a href="{{ route('Entecoformador.index') }}"><i class="fas fa-handshake"></i> Entes</a>
     <a href="/Fichasdecaracterizacion/index"><i class="fas fa-users"></i> Fichas</a>
     <a href="/Rolesadministrativos/index"><i class="fas fa-user-shield"></i> Roles Admin.</a>
-    <a href="/Bitacoras"><i class="fas fa-user-shield"></i> Bitacoras</a>
+
+
 </nav>
 
 <div class="container main-content">

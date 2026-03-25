@@ -42,6 +42,32 @@ Route::middleware(['auth', 'verified'])->group(function () {
 // AÑADE ESTA (para guardar los datos)
     Route::post('/aprendiz/registro-practica', [App\Http\Controllers\Aprendiz\PracticaController::class, 'store'])->name('practica.store');
 
+    // Ruta para ver la consulta del instructor
+    Route::get('/aprendiz/consultar-instructor', [App\Http\Controllers\Aprendiz\DashboardController::class, 'consultarInstructor'])->name('instructor.consulta');
+
+    // Ruta para ver el buscador
+    Route::get('/aprendiz/consultar-instructor', function () {
+        return view('aprendiz.instructor_busqueda');
+    })->name('instructor.consulta'); // <--- Este es el nombre que busca el error
+
+// Ruta para procesar la búsqueda por cédula
+    Route::post('/aprendiz/buscar-instructor', [App\Http\Controllers\Aprendiz\DashboardController::class, 'buscarInstructor'])->name('instructor.buscar');
+
+
+    // Grupo de rutas para el Instructor
+    Route::prefix('instructor')->group(function () {
+        // Panel principal (Lista de aprendices)
+        Route::get('/dashboard', [App\Http\Controllers\Instructor\InstructorController::class, 'index'])
+            ->name('instructor.dashboard');
+
+        // Ver el seguimiento detallado de un aprendiz específico
+        Route::get('/seguimiento/{nis}', [App\Http\Controllers\Instructor\InstructorController::class, 'verSeguimiento'])
+            ->name('instructor.seguimiento');
+    });
+
+
+
+
     // Módulos del Sistema - NORMALIZADOS
     Route::resource('Programasdeformacion', ProgramasdeformacionController::class)
         ->names('programasdeformacion')

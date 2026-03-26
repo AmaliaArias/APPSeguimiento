@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\bitacoras;
 
 class Aprendiz extends Model
 {
@@ -54,4 +55,11 @@ class Aprendiz extends Model
     {
         return $this->belongsTo(Eps::class, 'tbl_eps_NIS', 'NIS');
     }
+    public function bitacoras()
+    {
+        // Esto le dice a Laravel que un Aprendiz tiene muchas Bitácoras
+        // Ajusta 'tbl_aprendiz_NIS' si el nombre de la columna en tu tabla bitacoras es diferente
+        return $this->hasMany(Bitacoras::class, 'tbl_aprendiz_NIS', 'NIS');
+    }
+
 }
